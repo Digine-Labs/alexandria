@@ -33,6 +33,7 @@ pub trait HasherTrait<T> {
     fn hash(ref self: T, data1: felt252, data2: felt252) -> felt252;
 }
 
+// [Erim]: PedersenTrait and PoseidonTrait can be used in package.
 
 // Hasher representations.
 

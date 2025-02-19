@@ -20,6 +20,8 @@
 /// # TODO
 /// - Change the return type to `Result`
 pub fn day_of_week(mut date: u128, mut month: u128, mut year: u128) -> Option<u128> {
+    // [Erim]: date doesnt need to be mutable
+    // [ErimU: pdate return type to result trait
     // Check input parameters
     if !check_input_parameters(date, month, year) {
         return Option::None;

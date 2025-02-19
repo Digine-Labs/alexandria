@@ -3,6 +3,10 @@ pub trait UIntBytes<T> {
     fn to_bytes(self: T) -> Span<u8>;
 }
 
+// [Erim]: to_bytes can be deprecated or remains, but to_bytes_array can be added. Also from_bytes_array too
+// [Erim]: I dont understand why we used u32 only, this can be rewritten for any int type but can cause huge work,
+// Lets discuss that.
+
 impl U32BytesImpl of UIntBytes<u32> {
     /// Packs 4 bytes into a u32
     /// # Arguments

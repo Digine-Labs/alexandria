@@ -11,6 +11,10 @@ pub(crate) const HALF_RAY: u256 = 500_000_000_000_000_000_000_000_000; // 0.5e27
 pub(crate) const WAD_RAY_RATIO: u256 = 1_000_000_000; // 1e9
 pub(crate) const HALF_WAD_RAY_RATIO: u256 = 500_000_000; // 0.5e9
 
+// [Erim]: There might be other functions can be added and we can add auditor reviews as comments. One of the biggest hacks on Starknet caused by rounding issues. 
+// We can create generic & simple code with auditors.
+// Like: wal_mul_down : Suggested usecase from auditors etc etc.
+
 
 /// Return the wad value
 /// # Returns
