@@ -44,6 +44,7 @@ pub impl BytesIndex of IndexView<Bytes, usize> {
     }
 }
 
+// [Erim] Todo: Deprecate full package. Seems like no logic after bytesarray
 
 pub trait BytesTrait {
     /// Create a Bytes from an array of u128

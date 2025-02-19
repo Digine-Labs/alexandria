@@ -3,6 +3,8 @@ use core::byte_array::ByteArrayTrait;
 use core::integer::u512;
 use super::bit_array::{one_shift_left_bytes_felt252, one_shift_left_bytes_u128};
 
+// [Erim] Todo: Same as byte_reader.cairo
+
 /// Generic support trait for appending signed and unsigned integers onto byte storage.
 /// There are two functions, one for each of big and little endian byte order due to
 /// performance considerations. The byte reversal could be used in the naïve case when

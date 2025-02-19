@@ -1,5 +1,6 @@
 use alexandria_data_structures::byte_reader::ByteReader;
 
+// [Erim] Todo: Why we need bytereader? Since we now Span<u8> is span of bytes
 pub impl SpanU8IntoBytearray of Into<Span<u8>, ByteArray> {
     #[inline]
     fn into(self: Span<u8>) -> ByteArray {
@@ -21,6 +22,7 @@ impl ArrayU8IntoByteArray of Into<Array<u8>, ByteArray> {
     }
 }
 
+// [Erim] Todo: Bytearray iter can be used here
 pub impl ByteArrayIntoArrayU8 of Into<ByteArray, Array<u8>> {
     fn into(self: ByteArray) -> Array<u8> {
         let mut reader = self.reader();

@@ -195,3 +195,5 @@ impl U256ToAsciiTraitImpl of ToAsciiTrait<u256, Array<felt252>> {
         data
     }
 }
+
+// [Erim] Todo: Ascii Byte array?

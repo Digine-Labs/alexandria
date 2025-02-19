@@ -8,6 +8,8 @@ pub struct ByteReaderState<T> {
     index: usize,
 }
 
+// [Erim] Todo: This trait can be written or tested with ByteArrays instead of span u8. I couldnt find any byte reading functions on corelib
+// Also it can be re-written as Byte array extension
 
 pub trait ByteReader<T> {
     /// Wraps the array of bytes in a ByteReader for sequential consumption of integers and/or bytes

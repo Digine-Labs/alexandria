@@ -1,6 +1,8 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_numeric::integers::UIntBytes;
 
+// [Erim] Todo: Rewrite whole implementation that works with Bytearray, This one will be deprecated.
+
 // Possible RLP errors
 #[derive(Drop, Copy, PartialEq)]
 pub enum RLPError {

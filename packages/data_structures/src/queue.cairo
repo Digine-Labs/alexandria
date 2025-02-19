@@ -13,6 +13,8 @@ pub trait QueueTrait<T> {
     fn is_empty(self: @Queue<T>) -> bool;
 }
 
+// [Erim] Todo: Maybe using dictionaries can add more functionalities because order can be re-designed.
+
 impl QueueImpl<T> of QueueTrait<T> {
     #[inline(always)]
     fn new() -> Queue<T> {
