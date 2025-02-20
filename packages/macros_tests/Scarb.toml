@@ -1,7 +1,7 @@
 [package]
 name = "macros_tests"
 description = "Dummy package only used to test macros. Not part of the workspace."
-version = "0.2.0"
+version.workspace = true
 edition = "2024_07"
 
 [dependencies]

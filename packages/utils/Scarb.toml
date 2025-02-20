@@ -1,6 +1,6 @@
 [package]
 name = "dl_alexandria_utils"
-version = "0.2.0"
+version.workspace = true
 description = "Cairo utilities"
 homepage = "https://github.com/Digine-Labs/alexandria/tree/0.2.0/packages/utils/src"
 edition = "2023_11"
