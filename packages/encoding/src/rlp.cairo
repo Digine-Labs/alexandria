@@ -1,27 +1,25 @@
 use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_numeric::integers::UIntBytes;
 
-// [Erim] Todo: Rewrite whole implementation that works with Bytearray, This one will be deprecated.
-
 // Possible RLP errors
 #[derive(Drop, Copy, PartialEq)]
 pub enum RLPError {
     EmptyInput,
     InputTooShort,
-    PayloadTooLong,
+    PayloadTooLong
 }
 
 // Possible RLP types
 #[derive(Drop, PartialEq)]
 pub enum RLPType {
     String,
-    List,
+    List
 }
 
 #[derive(Drop, Copy, PartialEq)]
 pub enum RLPItem {
     String: Span<u8>,
-    List: Span<RLPItem>,
+    List: Span<RLPItem>
 }
 
 #[generate_trait]
@@ -109,7 +107,7 @@ pub impl RLPImpl of RLPTrait {
                     }
                     output.extend_from_span(payload);
                 }
-            },
+            }
         }
 
         if input.len() > 0 {
@@ -184,14 +182,14 @@ pub impl RLPImpl of RLPTrait {
                 } else {
                     output.append(RLPItem::List(array![].span()));
                 }
-            },
+            }
         };
 
         let total_item_len = len + offset;
         if total_item_len < input_len {
             output
                 .extend_from_span(
-                    Self::decode(input.slice(total_item_len, input_len - total_item_len))?,
+                    Self::decode(input.slice(total_item_len, input_len - total_item_len))?
                 );
         }
 

@@ -2,8 +2,6 @@ use alexandria_data_structures::array_ext::ArrayTraitExt;
 use alexandria_math::BitShift;
 use core::num::traits::Bounded;
 
-// [Erim] Todo: impl for Bytearray
-
 pub trait Encoder<T> {
     fn encode(data: T) -> Array<u8>;
 }
@@ -275,7 +273,7 @@ fn get_base64_char_set() -> Array<u8> {
         '6',
         '7',
         '8',
-        '9',
+        '9'
     ];
     result
 }

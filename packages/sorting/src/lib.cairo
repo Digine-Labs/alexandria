@@ -5,8 +5,6 @@ pub mod quick_sort;
 #[cfg(test)]
 mod tests;
 
-// [Erim]: This package LGTM
-
 pub use bubble_sort::BubbleSort;
 pub use interface::{Sortable, SortableVec};
 pub use merge_sort::MergeSort;

@@ -1,11 +1,9 @@
+use alexandria_math::BitShift;
+
 pub trait UIntBytes<T> {
     fn from_bytes(input: Span<u8>) -> Option<T>;
     fn to_bytes(self: T) -> Span<u8>;
 }
-
-// [Erim]: to_bytes can be deprecated or remains, but to_bytes_array can be added. Also from_bytes_array too
-// [Erim]: I dont understand why we used u32 only, this can be rewritten for any int type but can cause huge work,
-// Lets discuss that.
 
 impl U32BytesImpl of UIntBytes<u32> {
     /// Packs 4 bytes into a u32
@@ -45,14 +43,14 @@ impl U32BytesImpl of UIntBytes<u32> {
                 (val3 / 0x1000000).try_into().unwrap(),
                 (val2 / 0x10000).try_into().unwrap(),
                 (val1 / 0x100).try_into().unwrap(),
-                val0,
+                val0
             ]
                 .span();
         }
 
         if val2 != 0 {
             return array![
-                (val2 / 0x10000).try_into().unwrap(), (val1 / 0x100).try_into().unwrap(), val0,
+                (val2 / 0x10000).try_into().unwrap(), (val1 / 0x100).try_into().unwrap(), val0
             ]
                 .span();
         }

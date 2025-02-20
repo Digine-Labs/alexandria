@@ -1,7 +1,5 @@
 use super::span_ext::SpanTraitExt;
 
-// [Erim] Todo: We can add Into<Array<t>,ByteArray> also for span to BA.
-
 pub trait ArrayTraitExt<T> {
     /// Moves all the elements of `other` into `self`, leaving `other` empty.
     fn append_all(ref self: Array<T>, ref other: Array<T>);
