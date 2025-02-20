@@ -74,7 +74,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "alexandria_storage"
+name = "dl_alexandria_storage"
 version = "0.2.0"
 
 [[package]]
