@@ -5,7 +5,7 @@ version = "0.2.0"
 edition = "2024_07"
 
 [dependencies]
-alexandria_macros = { path = "../macros" }
+alexandria_macros = { path = "../macros", version = "0.2.0" }
 
 [dev-dependencies]
 cairo_test = "2.7.0"
