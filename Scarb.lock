@@ -78,5 +78,5 @@ name = "alexandria_storage"
 version = "0.2.0"
 
 [[package]]
-name = "alexandria_utils"
+name = "dl_alexandria_utils"
 version = "0.2.0"
