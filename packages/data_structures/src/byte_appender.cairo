@@ -62,6 +62,11 @@ impl ByteAppenderSupportByteArrayImpl of ByteAppenderSupportTrait<ByteArray> {
     }
 }
 
+#[deprecated(
+    feature: "deprecated-ByteAppender",
+    note: "Use `alexandria_bytes::byte_appender`.",
+    since: "2.11.1",
+)]
 pub trait ByteAppender<T> {
     /// Appends an unsigned 16 bit integer encoded in big endian
     /// # Arguments
