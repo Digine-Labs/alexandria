@@ -22,12 +22,12 @@ pub const SIGHASH_ANYONECANPAY: u8 = 0x80;
 
 /// Verify a Bitcoin ECDSA signature
 ///
-/// # Arguments
+/// #### Arguments
 /// * `message_hash` - The hash of the message that was signed (typically a transaction hash)
 /// * `signature` - The ECDSA signature (r, s components)
 /// * `public_key` - The public key to verify against
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if signature is valid, false otherwise
 pub fn verify_signature(message_hash: u256, signature: Signature, public_key: PublicKey) -> bool {
     // Get curve parameters
@@ -97,10 +97,10 @@ pub fn verify_signature(message_hash: u256, signature: Signature, public_key: Pu
 
 /// Parse DER-encoded signature using ByteArray utilities
 ///
-/// # Arguments
+/// #### Arguments
 /// * `der_bytes` - DER-encoded signature bytes
 ///
-/// # Returns
+/// #### Returns
 /// * `Option<Signature>` - Parsed signature or None if invalid
 pub fn parse_der_signature(der_bytes: Span<u8>) -> Option<Signature> {
     if der_bytes.len() < 6 {
@@ -210,11 +210,11 @@ fn mod_pow(mut base: u256, mut exp: u256, modulus: u256) -> u256 {
 
 /// Create a signature hash for transaction signing using ByteArray
 ///
-/// # Arguments
+/// #### Arguments
 /// * `transaction_data` - The transaction data to be signed
 /// * `sighash_type` - The type of signature hash (SIGHASH_ALL, etc.)
 ///
-/// # Returns
+/// #### Returns
 /// * `u256` - The hash to be signed
 pub fn create_signature_hash(transaction_data: Span<u8>, sighash_type: u8) -> u256 {
     // Convert to ByteArray and append sighash type
@@ -251,13 +251,13 @@ fn hash256_from_byte_array(data: ByteArray) -> Array<u8> {
 
 /// Verify a signature against transaction data
 ///
-/// # Arguments
+/// #### Arguments
 /// * `transaction_data` - The transaction data that was signed
 /// * `signature` - The ECDSA signature
 /// * `public_key` - The public key to verify against
 /// * `sighash_type` - The signature hash type used
 ///
-/// # Returns
+/// #### Returns
 /// * `bool` - True if signature is valid for the transaction
 pub fn verify_transaction_signature(
     transaction_data: Span<u8>, signature: Signature, public_key: PublicKey, sighash_type: u8,
