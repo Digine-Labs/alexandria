@@ -79,6 +79,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "alexandria_parser"
+version = "0.5.1"
+
+[[package]]
 name = "alexandria_searching"
 version = "0.5.1"
 dependencies = [
