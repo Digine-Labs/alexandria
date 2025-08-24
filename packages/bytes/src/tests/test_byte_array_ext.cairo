@@ -487,3 +487,16 @@ fn test_append_u16_new() {
     let mut ba: ByteArray = Default::default();
     ba.append_u16(0x0102_u16);
 }
+
+#[test]
+fn test_keccak_be() {
+    let x = 1234_u256;
+    let solidity_expected: u256 =
+        10845050086153542540880384713334172698320754731055414623607759687799872907108;
+
+    let mut ba: ByteArray = Default::default();
+    ba.append_u256(x);
+    let keccak_be_result = ba.keccak_be();
+
+    assert_eq!(keccak_be_result, solidity_expected);
+}
