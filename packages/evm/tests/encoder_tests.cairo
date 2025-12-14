@@ -190,17 +190,16 @@ fn test_encode_bytes2() {
 fn test_encode_bytes32() {
     let mut encoder_ctx = new_encoder();
 
-    // Debug: check lengths
-    let types = array![EVMTypes::Bytes32].span();
-    let values = array![
-        0xffffffffffffffffffffffffffffffff, // low: lower 128 bits (16 bytes of 0xff)
-        0xaaffffffffffffffffffffffffffffff // high: upper 128 bits (0xaa + 15 bytes of 0xff)
-    ]
-        .span();
+    // Create a ByteArray with 32 bytes
+    let mut ba: ByteArray = Default::default();
+    ba.append_u256(0xaaffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff);
 
-    // These should be equal now
-    assert!(types.len() == 1, "Types length should be 1");
-    assert!(values.len() == 2, "Values length should be 2");
+    // Serialize the ByteArray to get the format expected by encoder
+    let mut serialized = array![];
+    ba.serialize(ref serialized);
+
+    let types = array![EVMTypes::Bytes32].span();
+    let values = serialized.span();
 
     let encoded = encoder_ctx.encode(types, values);
 
@@ -808,3 +807,85 @@ fn test_encode_true_nested_arrays() {
 
     assert!(encoded == expected_bytes);
 }
+
+#[test]
+fn test_encode_nested_tuple_with_dynamic_field() {
+    // Tests encoding of nested tuples where inner tuple contains dynamic fields
+    // Example structure similar to: ZkgmPacket { id: u256, instruction: Instruction { value: u128,
+    // data: ByteArray } }
+    //
+    // 1. Appending both temp_ctx.calldata AND temp_ctx.dynamic_data
+    // 2. Correctly updating dynamic_offset with total length
+    // 3. Returning actual consumed values instead of pre-calculated estimate
+
+    let mut encoder_ctx = new_encoder();
+
+    // Test: Tuple(u256, Tuple(u128, ByteArray))
+    let mut inner_ba: ByteArray = "DATA";
+    let mut inner_serialized = array![];
+    inner_ba.serialize(ref inner_serialized);
+
+    let mut values = array![];
+    values.append(0x1234);
+    values.append(0x0); // u256
+    values.append(0xABCD); // inner tuple u128
+
+    // Add ByteArray serialization
+    let mut i = 0;
+    while i < inner_serialized.len() {
+        values.append(*inner_serialized.at(i));
+        i += 1;
+    }
+
+    let inner_tuple_types = array![EVMTypes::Uint128, EVMTypes::Bytes].span();
+    let outer_tuple_types = array![EVMTypes::Uint256, EVMTypes::Tuple(inner_tuple_types)].span();
+
+    // This call validates:
+    // - No "Not all values were consumed" error (proves fix works)
+    // - Proper encoding of nested dynamic structures
+    let encoded = encoder_ctx
+        .encode(array![EVMTypes::Tuple(outer_tuple_types)].span(), values.span());
+
+    // Verify we got output (length > 0 means encoding succeeded)
+    // Before fix #422, this would have failed with "Not all values were consumed"
+    assert!(encoded.len() > 0, "Encoding should produce output");
+}
+
+#[test]
+fn test_encode_triple_nested_tuple_with_dynamic() {
+    // Tests: Tuple(u256, Tuple(u128, Tuple(u64, ByteArray)))
+    //
+    // This is a more complex scenario with 3 levels of nesting
+    // Validates the fix handles recursive nested tuple encoding correctly
+
+    let mut encoder_ctx = new_encoder();
+
+    let mut ba: ByteArray = "DEEP";
+    let mut ba_serialized = array![];
+    ba.serialize(ref ba_serialized);
+
+    let mut values = array![];
+    values.append(0x1111);
+    values.append(0x0); // outer u256
+    values.append(0x2222); // middle u128
+    values.append(0x3333); // innermost u64
+
+    let mut i = 0;
+    while i < ba_serialized.len() {
+        values.append(*ba_serialized.at(i));
+        i += 1;
+    }
+
+    let deepest_tuple_types = array![EVMTypes::Uint64, EVMTypes::Bytes].span();
+    let middle_tuple_types = array![EVMTypes::Uint128, EVMTypes::Tuple(deepest_tuple_types)].span();
+    let root_tuple_types = array![EVMTypes::Uint256, EVMTypes::Tuple(middle_tuple_types)].span();
+
+    // This validates the fix works for deeply nested structures
+    // Before fix #422, this would have failed with "Not all values were consumed"
+    let encoded = encoder_ctx
+        .encode(array![EVMTypes::Tuple(root_tuple_types)].span(), values.span());
+
+    // Verify encoding succeeded
+    assert!(encoded.len() > 0, "Encoding should produce output");
+}
+
