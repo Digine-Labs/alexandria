@@ -846,9 +846,32 @@ fn test_encode_nested_tuple_with_dynamic_field() {
     let encoded = encoder_ctx
         .encode(array![EVMTypes::Tuple(outer_tuple_types)].span(), values.span());
 
-    // Verify we got output (length > 0 means encoding succeeded)
-    // Before fix #422, this would have failed with "Not all values were consumed"
-    assert!(encoded.len() > 0, "Encoding should produce output");
+    // Build expected encoding for Tuple(u256, Tuple(u128, Bytes("DATA")))
+    // EVM ABI encoding for nested tuple with dynamic field:
+    // Slot 0: Offset pointer (0x0 since this is the root, dynamic data follows inline)
+    // Slot 1: u256 value (0x1234)
+    // Slot 2: Offset to inner tuple dynamic section (0x40 = 64 bytes)
+    // Slot 3: Inner tuple: u128 value (0xABCD)
+    // Slot 4: Inner tuple: offset to bytes data (0x40 = 64 bytes)
+    // Slot 5: Bytes length (4)
+    // Slot 6: Bytes data ("DATA" = 0x44415441)
+    let mut expected_bytes: ByteArray = Default::default();
+    // Slot 0: Offset (0 for root tuple)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000000);
+    // Slot 1: u256 value (0x1234)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000001234);
+    // Slot 2: Offset to inner tuple (0x40 = 64 bytes from start)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000040);
+    // Slot 3: Inner tuple u128 value (0xABCD)
+    expected_bytes.append_u256(0x000000000000000000000000000000000000000000000000000000000000ABCD);
+    // Slot 4: Inner tuple offset to bytes (0x40 = 64 bytes)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000040);
+    // Slot 5: Bytes length (4)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000004);
+    // Slot 6: Bytes data ("DATA" = 0x44415441)
+    expected_bytes.append_u256(0x4441544100000000000000000000000000000000000000000000000000000000);
+
+    assert!(encoded == expected_bytes, "Nested tuple encoding mismatch");
 }
 
 #[test]
@@ -856,7 +879,6 @@ fn test_encode_triple_nested_tuple_with_dynamic() {
     // Tests: Tuple(u256, Tuple(u128, Tuple(u64, ByteArray)))
     //
     // This is a more complex scenario with 3 levels of nesting
-    // Validates the fix handles recursive nested tuple encoding correctly
 
     let mut encoder_ctx = new_encoder();
 
@@ -865,10 +887,10 @@ fn test_encode_triple_nested_tuple_with_dynamic() {
     ba.serialize(ref ba_serialized);
 
     let mut values = array![];
-    values.append(0x1111);
-    values.append(0x0); // outer u256
-    values.append(0x2222); // middle u128
-    values.append(0x3333); // innermost u64
+    values.append(0x1111); // u256 low
+    values.append(0x2222); // u256 high
+    values.append(0x3333); // u128
+    values.append(0x4444); // u64
 
     let mut i = 0;
     while i < ba_serialized.len() {
@@ -880,12 +902,31 @@ fn test_encode_triple_nested_tuple_with_dynamic() {
     let middle_tuple_types = array![EVMTypes::Uint128, EVMTypes::Tuple(deepest_tuple_types)].span();
     let root_tuple_types = array![EVMTypes::Uint256, EVMTypes::Tuple(middle_tuple_types)].span();
 
-    // This validates the fix works for deeply nested structures
-    // Before fix #422, this would have failed with "Not all values were consumed"
     let encoded = encoder_ctx
         .encode(array![EVMTypes::Tuple(root_tuple_types)].span(), values.span());
 
-    // Verify encoding succeeded
-    assert!(encoded.len() > 0, "Encoding should produce output");
+    // Build expected encoding for Tuple(u256, Tuple(u128, Tuple(u64, Bytes("DEEP"))))
+    // Based on actual output from encoder
+    let mut expected_bytes: ByteArray = Default::default();
+    // Slot 0: Root offset (0 for root tuple)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000000);
+    // Slot 1: u256 value (low=0x1111, high=0x2222)
+    expected_bytes.append_u256(0x0000000000000000000000000000222200000000000000000000000000001111);
+    // Slot 2: Offset to middle tuple (0x40 = 64 bytes)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000040);
+    // Slot 3: Middle tuple u128 (0x3333)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000003333);
+    // Slot 4: Middle tuple offset to deepest tuple (0x40 = 64 bytes)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000040);
+    // Slot 5: Deepest tuple u64 (0x4444)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000004444);
+    // Slot 6: Deepest tuple offset to bytes (0x40 = 64 bytes)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000040);
+    // Slot 7: Bytes length (4)
+    expected_bytes.append_u256(0x0000000000000000000000000000000000000000000000000000000000000004);
+    // Slot 8: Bytes data ("DEEP" = 0x44454550)
+    expected_bytes.append_u256(0x4445455000000000000000000000000000000000000000000000000000000000);
+
+    assert!(encoded == expected_bytes, "Triple nested tuple encoding mismatch");
 }
 
