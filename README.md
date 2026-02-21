@@ -27,7 +27,7 @@
 - [Request a Feature](#request-a-feature)
 - [About](#about)
 - [Version](#version)
-- [Features](#features)
+- [Packages](#packages)
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation from Scarb registries](#installation-from-scarb-registries)
@@ -35,12 +35,13 @@
   - [Build](#build)
   - [Test](#test)
   - [Format](#format)
+- [Documentation](#documentation)
+- [Security](#security)
 - [Roadmap](#roadmap)
 - [Support](#support)
 - [Project assistance](#project-assistance)
 - [Contributing](#contributing)
 - [Authors \& contributors](#authors--contributors)
-- [Security](#security)
 - [License](#license)
 - [Acknowledgements](#acknowledgements)
 - [Contributors ✨](#contributors-)
@@ -57,7 +58,7 @@ Current version can be found in the [toml file](./Scarb.toml)
 
 ## Version
 
-Current version is **0.9.0** compatible with Cairo **2.15.0**
+Current version is **0.10.0** compatible with Cairo **2.16.0**
 
 
 ## Packages
@@ -75,6 +76,10 @@ This repository is composed of multiple crates:
 - [Storage](./packages/storage/README.md)
 - [Bytes](./packages/bytes/README.md)
 - [Evm](./packages/evm/README.md)
+- [Json](./packages/json/README.md)
+- [Macros](./packages/macros/README.md)
+- [Merkle Tree](./packages/merkle_tree/README.md)
+- [Utils](./packages/utils/README.md)
 - [Bitcoin](./packages/btc/README.md)
 
 ## Getting Started
@@ -88,19 +93,20 @@ This repository is composed of multiple crates:
 
 ### Installation from Scarb registries
 
-- ASCII : `scarb add alexandria_ascii@0.9.0`
-- Data Structures : `scarb add alexandria_data_structures@0.9.0`
-- Encoding : `scarb add alexandria_encoding@0.9.0`
-- Linalg : `scarb add alexandria_linalg@0.9.0`
-- Math : `scarb add alexandria_math@0.9.0`
-- Numeric : `scarb add alexandria_numeric@0.9.0`
-- Searching : `scarb add alexandria_searching@0.9.0`
-- Sorting : `scarb add alexandria_sorting@0.9.0`
-- Storage : `scarb add alexandria_storage@0.9.0`
-- Bytes : `scarb add alexandria_bytes@0.9.0`
-- Evm : `scarb add alexandria_evm@0.9.0`
-- Bitcoin : `scarb add alexandria_btc@0.9.0`
-- Json : `scarb add alexandria_json@0.9.0`
+- ASCII : `scarb add alexandria_ascii@0.10.0`
+- Data Structures : `scarb add alexandria_data_structures@0.10.0`
+- Encoding : `scarb add alexandria_encoding@0.10.0`
+- Linalg : `scarb add alexandria_linalg@0.10.0`
+- Math : `scarb add alexandria_math@0.10.0`
+- Merkle Tree : `scarb add alexandria_merkle_tree@0.10.0`
+- Numeric : `scarb add alexandria_numeric@0.10.0`
+- Searching : `scarb add alexandria_searching@0.10.0`
+- Sorting : `scarb add alexandria_sorting@0.10.0`
+- Storage : `scarb add alexandria_storage@0.10.0`
+- Bytes : `scarb add alexandria_bytes@0.10.0`
+- Evm : `scarb add alexandria_evm@0.10.0`
+- Bitcoin : `scarb add alexandria_btc@0.10.0`
+- Json : `scarb add alexandria_json@0.10.0`
 
 
 ## Usage
@@ -133,7 +139,11 @@ scarb fmt
 
 ## Security
 
-The codebase is not audited. It is actively developed, but no professional security checks have been performed on it. Use it at your own risk. We highly recommend writing your own tests for your specific use cases.
+Alexandria follows good practices of security, but 100% security cannot be assured. The codebase is not audited and is actively developed, with no professional security checks performed on it. Alexandria is provided **"as is"** without any **warranty**. Use at your own risk.
+
+We highly recommend writing your own tests for your specific use cases.
+
+_For more information and to report security issues, please refer to our [security documentation](docs/SECURITY.md)._
 
 ## Roadmap
 
@@ -169,13 +179,6 @@ Please read [our contribution guidelines](docs/CONTRIBUTING.md), and thank you f
 ## Authors & contributors
 
 For a full list of all authors and contributors, see [the contributors page](https://github.com/keep-starknet-strange/alexandria/contributors).
-
-## Security
-
-Alexandria follows good practices of security, but 100% security cannot be assured.
-Alexandria is provided **"as is"** without any **warranty**. Use at your own risk.
-
-_For more information and to report security issues, please refer to our [security documentation](docs/SECURITY.md)._
 
 ## License
 
